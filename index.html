@@ -1,4 +1,5 @@
 <!doctype html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -25,7 +26,6 @@
     --success: #059669;
     --danger: #dc2626;
   }
-
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
@@ -39,14 +39,12 @@
     -moz-osx-font-smoothing:grayscale;
     padding:32px;
   }
-
   .wrap{
     max-width:900px;
     margin:24px auto;
     display:grid;
     gap:18px;
   }
-
   header{
     display:flex;
     align-items:center;
@@ -63,7 +61,6 @@
     font-size:13px;
     margin-top:6px;
   }
-
   .card{
     background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
     border-radius:var(--radius);
@@ -73,7 +70,6 @@
     gap:18px;
     align-items:flex-start;
   }
-
   .left{
     flex:1 1 360px;
   }
@@ -81,13 +77,11 @@
     width:360px;
     min-width:260px;
   }
-
   form.poll{
     display:flex;
     flex-direction:column;
     gap:12px;
   }
-
   /* Radio cards */
   .option{
     display:flex;
@@ -107,7 +101,6 @@
     box-shadow: 0 8px 30px rgba(124,58,237,0.06);
     transform:translateY(-3px);
   }
-
   .dot{
     width:34px; height:34px; border-radius:10px;
     display:grid; place-items:center;
@@ -117,7 +110,6 @@
     border:1px solid rgba(255,255,255,0.03);
     font-size:13px;
   }
-
   .opt-text{
     flex:1;
   }
@@ -127,7 +119,6 @@
     margin-bottom:4px;
   }
   .opt-desc{ font-size:13px; color:var(--muted); }
-
   .controls{
     display:flex;
     gap:8px;
@@ -153,7 +144,6 @@
     border:1px solid rgba(255,255,255,0.04);
   }
   .small{ padding:8px 12px; font-size:13px; }
-
   /* Results */
   .result{
     display:flex;
@@ -170,9 +160,8 @@
   }
   .res-left{ width:110px; font-weight:700; font-size:14px; }
   .bar-wrap{ flex:1; background:rgba(255,255,255,0.03); height:12px; border-radius:8px; overflow:hidden; position:relative; }
-  .bar{ height:100%; border-radius:8px 0 0 8px; transition:width .45s cubic-bezier(.2,.9,.2,1);}
+  .bar{ height:100%; border-radius:8px 0 0 8px; transition:width .45s cubic-bezier(.2,.9,.2,1);} 
   .count{ width:56px; text-align:right; font-weight:600; font-size:13px; color:var(--muted); }
-
   .leader{
     display:flex;
     align-items:center;
@@ -184,7 +173,6 @@
     font-weight:700;
     font-size:13px;
   }
-
   .meta{
     display:flex;
     justify-content:space-between;
@@ -194,13 +182,11 @@
     margin-top:6px;
     font-size:13px;
   }
-
   /* tiny responsive */
   @media (max-width:780px){
     .card{ flex-direction:column; }
     .right{ width:100% }
   }
-
   /* little toast */
   .toast{
     position:fixed;
@@ -230,7 +216,6 @@
       <button id="themeToggle" class="btn btn-ghost small" title="Toggle light/dark">Toggle Theme</button>
     </div>
   </header>
-
   <div class="card">
     <div class="left">
       <form id="pollForm" class="poll" autocomplete="off">
@@ -239,16 +224,13 @@
           <button type="submit" class="btn btn-primary">Vote</button>
           <button id="changeVoteBtn" type="button" class="btn btn-ghost small">Change Vote</button>
           <button id="undoBtn" type="button" class="btn btn-ghost small">Undo My Vote</button>
-          <button id="resetBtn" type="button" class="btn small btn-ghost" style="margin-left:auto">Reset votes</button>
         </div>
       </form>
-
       <div class="meta">
         <div id="statusText">You haven't voted yet.</div>
         <div id="totalVotes" style="font-weight:700">Total: 0</div>
       </div>
     </div>
-
     <aside class="right">
       <div style="font-weight:700; margin-bottom:8px">Results</div>
       <div id="results" class="result">
@@ -257,23 +239,18 @@
     </aside>
   </div>
 </div>
-
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
 <script>
 (function(){
   const OPTIONS = ['Math','English','Chemistry','Physics'];
-
   // Helpers for localStorage persistence
   const STORAGE_KEY = 'poll_votes_v1';
   const VOTED_KEY = 'poll_voted_for_v1';
-
   function defaultVotes(){
     const obj = {};
     OPTIONS.forEach(o => obj[o] = 0);
     return obj;
   }
-
   function loadVotes(){
     try{
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -285,7 +262,6 @@
   }
   function loadVotedFor(){ return localStorage.getItem(VOTED_KEY) || null; }
   function saveVotedFor(name){ if(name) localStorage.setItem(VOTED_KEY, name); else localStorage.removeItem(VOTED_KEY); }
-
   // UI Elements
   const form = document.getElementById('pollForm');
   const resultsEl = document.getElementById('results');
@@ -294,10 +270,8 @@
   const leaderBadge = document.getElementById('leaderBadge');
   const toast = document.getElementById('toast');
   const changeVoteBtn = document.getElementById('changeVoteBtn');
-  const resetBtn = document.getElementById('resetBtn');
   const undoBtn = document.getElementById('undoBtn');
   const themeToggle = document.getElementById('themeToggle');
-
   // Insert radio options into form
   function renderOptions(votedFor){
     // clear existing option nodes except controls (controls are after options; easy approach: rebuild form)
@@ -310,7 +284,6 @@
       radio.id = id;
       radio.value = opt;
       if(votedFor === opt) radio.checked = true;
-
       const label = document.createElement('label');
       label.className = 'option';
       label.htmlFor = id;
@@ -324,7 +297,6 @@
       form.appendChild(radio);
       form.appendChild(label);
     });
-
     // controls (include Undo)
     const ctrl = document.createElement('div');
     ctrl.style = 'display:flex;gap:8px;margin-top:10px';
@@ -332,29 +304,23 @@
       <button type="submit" class="btn btn-primary">Vote</button>
       <button id="changeVoteBtnLocal" type="button" class="btn btn-ghost small">Change Vote</button>
       <button id="undoBtnLocal" type="button" class="btn btn-ghost small">Undo My Vote</button>
-      <button id="resetBtnLocal" type="button" class="btn small btn-ghost" style="margin-left:auto">Reset votes</button>
     `;
     form.appendChild(ctrl);
-
     // rebind local controls to handlers
     form.querySelector('#changeVoteBtnLocal').addEventListener('click', onChangeVoteClick);
     form.querySelector('#undoBtnLocal').addEventListener('click', onUndoClick);
-    form.querySelector('#resetBtnLocal').addEventListener('click', onResetClick);
   }
-
   // Render results (bars + counts)
   function renderResults(votes){
     resultsEl.innerHTML = '';
     const total = Object.values(votes).reduce((a,b)=>a+b,0);
     totalVotesEl.textContent = 'Total: ' + total;
-
     OPTIONS.forEach(opt => {
       const row = document.createElement('div');
       row.className = 'res-row';
       const left = document.createElement('div');
       left.className = 'res-left';
       left.textContent = opt;
-
       const barWrap = document.createElement('div');
       barWrap.className = 'bar-wrap';
       const bar = document.createElement('div');
@@ -363,11 +329,9 @@
       const pct = total ? Math.round((votes[opt]/total)*100) : 0;
       bar.style.width = pct + '%';
       bar.style.background = `linear-gradient(90deg, var(--accent), rgba(124,58,237,0.75))`;
-
       const count = document.createElement('div');
       count.className = 'count';
       count.textContent = votes[opt] + ' • ' + pct + '%';
-
       barWrap.appendChild(bar);
       row.appendChild(left);
       row.appendChild(barWrap);
@@ -375,7 +339,6 @@
       resultsEl.appendChild(row);
     });
   }
-
   // Leader calculation
   function findLeader(votes){
     const entries = Object.entries(votes);
@@ -384,21 +347,17 @@
     const leaders = entries.filter(e=>e[1] === max).map(e=>e[0]);
     return {leaders, max};
   }
-
   // UI state updates
   function updateUI(){
     const votes = loadVotes();
     const votedFor = loadVotedFor();
-
     renderOptions(votedFor);
     renderResults(votes);
-
     if(votedFor){
       statusText.textContent = `You voted for ${votedFor}.`;
     } else {
       statusText.textContent = `You haven't voted yet.`;
     }
-
     const leader = findLeader(votes);
     if(!leader){
       leaderBadge.textContent = 'No votes yet';
@@ -411,7 +370,6 @@
       leaderBadge.style.opacity = '1';
     }
   }
-
   // Toast helper
   let toastTimer = null;
   function showToast(msg, ms=2200){
@@ -420,7 +378,6 @@
     clearTimeout(toastTimer);
     toastTimer = setTimeout(()=> toast.classList.remove('show'), ms);
   }
-
   // Event handlers
   function onVote(e){
     e.preventDefault();
@@ -429,7 +386,6 @@
     if(!choice){ showShake(); showToast('Pick an option first'); return; }
     const votes = loadVotes();
     const votedFor = loadVotedFor();
-
     if(!votedFor){
       // first-time vote
       votes[choice] = (votes[choice] || 0) + 1;
@@ -451,14 +407,12 @@
       updateUI();
     }
   }
-
   function onChangeVoteClick(){
     // allow user to change selection even if they've voted
     saveVotedFor(null);
     updateUI();
     showToast('You can now pick a new option and press Vote');
   }
-
   // NEW: Undo only the current user's vote (decrement that option and clear their voted flag)
   function onUndoClick(){
     const votedFor = loadVotedFor();
@@ -474,22 +428,11 @@
     showToast(`Your vote for ${votedFor} was removed.`);
     updateUI();
   }
-
-  function onResetClick(){
-    const ok = confirm('Reset all votes and clear your vote? (for testing/admin)');
-    if(!ok) return;
-    localStorage.removeItem(STORAGE_KEY);
-    localStorage.removeItem(VOTED_KEY);
-    updateUI();
-    showToast('Votes reset');
-  }
-
   function showShake(){
     // quick shaking animation on card
     const c = document.querySelector('.card');
     c.animate([{transform:'translateY(0)'},{transform:'translateY(-6px)'},{transform:'translateY(0)'}], {duration:260, easing:'ease-out'});
   }
-
   // theme toggle
   function initTheme(){
     const root = document.documentElement;
@@ -505,7 +448,6 @@
       }
     });
   }
-
   // bootstrap
   function init(){
     initTheme();
@@ -513,12 +455,9 @@
     form.addEventListener('submit', onVote);
     // also bind top-level buttons (these are replaced on render, but keep for safety)
     changeVoteBtn && (changeVoteBtn.onclick = onChangeVoteClick);
-    resetBtn && (resetBtn.onclick = onResetClick);
     undoBtn && (undoBtn.onclick = onUndoClick);
   }
-
   init();
-
 })();
 </script>
 </body>
